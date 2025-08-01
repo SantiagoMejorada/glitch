@@ -2,12 +2,12 @@
 import { getCollection } from "astro:content";
 import GlitchLayout from "../../layouts/GlitchLayout.astro";
 import GameCard from "../../components/GameCard.astro";
-import { UI_CONFIG, CATEGORIES } from "../../constants";
+import { UI_CONFIG, CATEGORIES, COLLECTION, ROUTES } from "../../constants";
 import { sortPostsByDate, filterPostsByCategory } from "../../utils/postUtils";
 import type { Category } from "../../types";
 
 // Obtener todos los posts
-const allPosts = await getCollection("blog");
+const allPosts = await getCollection(COLLECTION.BLOG);
 
 // Fecha mas reciente
 const sortedPosts = sortPostsByDate(allPosts);
@@ -15,7 +15,7 @@ const sortedPosts = sortPostsByDate(allPosts);
 
 const url = Astro.url;
 // Reseña | Opinion | Noticia
-const categoryFilter = url.searchParams.get('categoria') as Category | null;
+const categoryFilter = url.searchParams.get(COLLECTION.CATEGORIES) as Category | null;
 
 const filteredPosts = categoryFilter 
   ? filterPostsByCategory(sortedPosts, categoryFilter)
@@ -41,14 +41,14 @@ const availableCategories = Object.values(CATEGORIES);
       <!-- Filtros de categoría -->
       <nav class="category-filters">
         <a 
-          href="/blog" 
+          href={ROUTES.BLOG} 
           class={`filter-button ${!categoryFilter ? 'active' : ''}`}
         >
           Todos
         </a>
         {availableCategories.map((category) => (
           <a 
-            href={`/blog?categoria=${category.key}`}
+            href={`${ROUTES.BLOG}?${COLLECTION.CATEGORIES}=${category.key}`}
             class={`filter-button ${categoryFilter === category.key ? 'active' : ''} ${category.color}`}
           >
             {category.displayName}
@@ -75,7 +75,7 @@ const availableCategories = Object.values(CATEGORIES);
           <div class="no-posts">
             <p>No hay posts disponibles{categoryFilter ? ` en la categoría "${categoryFilter}"` : ''}.</p>
             {categoryFilter && (
-              <a href="/blog" class="back-to-all">Ver todos los posts</a>
+              <a href={ROUTES.BLOG} class="back-to-all">Ver todos los posts</a>
             )}
           </div>
         )}

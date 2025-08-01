@@ -4,7 +4,7 @@ import GlitchLayout from "../layouts/GlitchLayout.astro";
 import ArenaWelcome from "../components/ArenaWelcome.astro";
 import SpotlightCard from "../components/SpotlightCard.astro";
 import GameCard from "../components/GameCard.astro";
-import { UI_CONFIG } from "../constants";
+import { UI_CONFIG, COLLECTION } from "../constants";
 import {
 	sortPostsByDate,
 	getLatestPost,
@@ -12,7 +12,7 @@ import {
 	getFeaturedPosts,
 } from "../utils/postUtils";
 
-const allPosts = await getCollection("blog");
+const allPosts = await getCollection(COLLECTION.BLOG);
 
 const sortedPosts = sortPostsByDate(allPosts);
 

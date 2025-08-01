@@ -1,4 +1,5 @@
 import { defineCollection, z } from 'astro:content';
+import { CATEGORIES } from '../constants';
 
 // La colección es para todas las categorías
 const blogCollection = defineCollection({
@@ -7,7 +8,7 @@ const blogCollection = defineCollection({
     title: z.string(),
     description: z.string(),
     publishDate: z.date(),
-    category: z.enum(['reseñas', 'opiniones', 'noticias']),
+    category: z.enum([CATEGORIES.REVIEWS.key, CATEGORIES.OPINIONS.key, CATEGORIES.NEWS.key]),
     image: z.string(),
     featured: z.boolean().default(false),
   }),

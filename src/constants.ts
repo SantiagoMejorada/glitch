@@ -7,7 +7,7 @@ export const ROUTES = {
 
 // ===== CONFIGURACIÓN DE UI =====
 export const UI_CONFIG = {
-  BRAND_NAME: '🎮 Glitch',
+  BRAND_NAME: 'Glitch',
   NAV_LABELS: {
     HOME: 'Inicio',
     BLOG: 'Blog',
@@ -98,6 +98,11 @@ export const LAYOUT = {
   CARD_IMAGE_HEIGHT: '180px',
   SPOTLIGHT_MAX_HEIGHT: '400px',
   MOBILE_BREAKPOINT: '768px',
+} as const;
+
+export const COLLECTION = {
+  BLOG: 'blog',
+  CATEGORIES: 'categoria',
 } as const;
 
 // ===== UTILIDADES DE TIPO =====

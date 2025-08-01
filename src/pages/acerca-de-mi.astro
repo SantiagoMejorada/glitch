@@ -19,9 +19,9 @@ import { UI_CONFIG } from "../constants";
 				<div class="about-card">
 					<div class="avatar-section">
 						<div class="avatar">
-							<span class="avatar-emoji">🎮</span>
-						</div>
-						<h2 class="gamer-tag">GlitchMaster</h2>
+						<img src="/img/general/1.png" alt="GlitchMaster Avatar" style="width: 100%; height: 100%; object-fit: cover;">
+					</div>
+					<h2 class="gamer-tag">GlitchMaster</h2>
 						<p class="gamer-subtitle">Crítico Gaming & Desarrollador</p>
 					</div>
 
@@ -158,27 +158,20 @@ import { UI_CONFIG } from "../constants";
 	}
 
 	.avatar {
-		width: 120px;
-		height: 120px;
-		border-radius: 50%;
-		background: linear-gradient(135deg, var(--accent-2), var(--accent-1));
+		width: 180px;
+		height: 180px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		margin: 0 auto 1rem;
-		box-shadow: 0 0 20px rgba(0, 195, 255, 0.3);
-		transition: transform 0.3s ease, box-shadow 0.3s ease;
+		transition: transform 0.3s ease;
 	}
 
 	.avatar:hover {
 		transform: scale(1.05);
-		box-shadow: 0 0 25px rgba(0, 195, 255, 0.5);
 	}
 
-	.avatar-emoji {
-		font-size: 3rem;
-		filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
-	}
+
 
 	.gamer-tag {
 		font-family: 'Orbitron', sans-serif;
@@ -333,8 +326,8 @@ import { UI_CONFIG } from "../constants";
 		}
 
 		.avatar {
-			width: 100px;
-			height: 100px;
+			width: 150px;
+			height: 150px;
 		}
 
 		.avatar-emoji {

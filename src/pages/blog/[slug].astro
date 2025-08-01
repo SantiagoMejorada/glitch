@@ -3,11 +3,11 @@ import { getCollection } from 'astro:content';
 import GlitchLayout from '../../layouts/GlitchLayout.astro';
 import { formatDate } from '../../utils/dateUtils';
 import { getCategoryColor, getCategoryDisplayName } from '../../utils/postUtils';
-import { UI_CONFIG, SEO } from '../../constants';
+import { UI_CONFIG, COLLECTION } from '../../constants';
 
 // Rutas estáticas para los posts
 export async function getStaticPaths() {
-  const blogEntries = await getCollection('blog');
+  const blogEntries = await getCollection(COLLECTION.BLOG);
   return blogEntries.map(entry => ({
     params: { slug: entry.slug },
     props: { entry },
