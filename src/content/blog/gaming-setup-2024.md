@@ -3,7 +3,7 @@ title: "El setup gaming definitivo para 2024"
 description: "Descubre los componentes esenciales para crear el setup gaming perfecto este año, desde periféricos hasta la configuración ideal de tu espacio."
 publishDate: 2024-01-10
 category: "opiniones"
-image: "https://images.unsplash.com/photo-1593305841991-05c297ba4575?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2057&q=80"
+image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=800&h=400&fit=crop&auto=format&q=80"
 featured: false
 ---
 

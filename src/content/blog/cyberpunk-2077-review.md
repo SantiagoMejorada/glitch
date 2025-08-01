@@ -3,7 +3,7 @@ title: "Cyberpunk 2077: Una odisea futurista que divide opiniones"
 description: "Después de años de espera y controversia, analizamos si Cyberpunk 2077 cumple con las expectativas o si sigue siendo un diamante en bruto."
 publishDate: 2024-01-15
 category: "reseñas"
-image: "https://4kwallpapers.com/images/wallpapers/cyberpunk-2077-3840x2160-12596.jpg"
+image: "https://4kwallpapers.com/images/wallpapers/cyberpunk-2077-2880x1800-13543.jpg"
 featured: true
 ---
 

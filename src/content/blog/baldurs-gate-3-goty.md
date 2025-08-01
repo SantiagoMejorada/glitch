@@ -3,7 +3,7 @@ title: "Baldur's Gate 3: El RPG que redefinió el género"
 description: "Exploramos cómo Larian Studios logró crear una obra maestra que combina narrativa profunda, libertad de elección y mecánicas de D&D perfectamente adaptadas."
 publishDate: 2024-01-05
 category: "reseñas"
-image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=800&h=400&fit=crop&auto=format&q=80"
 featured: false
 ---
 

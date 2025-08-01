@@ -3,7 +3,7 @@ title: "Nintendo Direct de febrero: Las sorpresas que nadie esperaba"
 description: "Analizamos los anuncios más impactantes del último Nintendo Direct y qué significan para el futuro de la consola híbrida."
 publishDate: 2024-01-08
 category: "noticias"
-image: "https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=800&h=400&fit=crop&auto=format&q=80"
 featured: false
 ---
 
