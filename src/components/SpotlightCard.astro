@@ -1,0 +1,228 @@
+---
+import type { SpotlightCardProps } from "../types";
+import { getCategoryColor } from "../utils/postUtils";
+import { formatDate } from "../utils/dateUtils";
+import { CONTENT } from "../constants";
+
+interface Props extends SpotlightCardProps {}
+
+const { title, description, category, image, slug, publishDate } = Astro.props;
+
+// Obtener el color de la categoría para el tag
+const categoryColor = getCategoryColor(category);
+
+// Formatear la fecha para mostrar
+const formattedDate = formatDate(publishDate);
+---
+
+<article class="spotlight-card">
+  <div class="spotlight-image">
+    <img src={image} alt={title} loading="lazy" />
+  </div>
+  
+  <div class="spotlight-content">
+    <div class="spotlight-tags">
+      <span class="featured-tag">
+        {CONTENT.FEATURED_TAG}
+      </span>
+      <span class={`category-tag ${categoryColor}`}>
+        {category.toUpperCase()}
+      </span>
+    </div>
+    
+    <h2 class="spotlight-title">
+      <a href={`/blog/${slug}`}>{title}</a>
+    </h2>
+    
+    <p class="spotlight-description">{description}</p>
+    
+    <div class="spotlight-footer">
+      <time class="spotlight-date text-muted" datetime={publishDate.toISOString()}>
+        {formattedDate}
+      </time>
+      
+      <a href={`/blog/${slug}`} class="read-more-spotlight">
+        {CONTENT.READ_MORE_TEXT}
+      </a>
+    </div>
+  </div>
+</article>
+
+<style>
+  .spotlight-card {
+    background: var(--bg-card);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: transform .25s ease, box-shadow .25s ease;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    min-height: 320px;
+    max-height: 400px;
+  }
+
+  .spotlight-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 0 20px rgba(0, 195, 255, .5);
+  }
+
+  .spotlight-image {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .spotlight-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform .3s ease;
+  }
+
+  .spotlight-card:hover .spotlight-image img {
+    transform: scale(1.05);
+  }
+
+  .spotlight-content {
+    padding: 2rem 2.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .spotlight-tags {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    margin-bottom: 1rem;
+  }
+
+  .featured-tag {
+    display: inline-block;
+    font-size: .7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: var(--accent-2);
+    align-self: flex-start;
+    margin-bottom: .25rem;
+  }
+
+  .category-tag {
+    display: inline-block;
+    font-size: .8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    align-self: flex-start;
+  }
+
+  .category-tag.red {
+    color: var(--accent-1);
+  }
+
+  .category-tag.blue {
+    color: var(--accent-2);
+  }
+
+  .category-tag.yellow {
+    color: var(--accent-3);
+  }
+
+  .spotlight-title {
+    font-size: 1.75rem;
+    margin: 0 0 1rem;
+    line-height: 1.2;
+    font-weight: 600;
+  }
+
+  .spotlight-title a {
+    color: var(--txt-main);
+    text-decoration: none;
+    transition: color .25s ease;
+  }
+
+  .spotlight-title a:hover {
+    color: var(--accent-2);
+  }
+
+  .spotlight-description {
+    color: var(--txt-muted);
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin: 0 0 1.5rem;
+    flex-grow: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .spotlight-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+  }
+
+  .spotlight-date {
+    color: var(--txt-muted);
+    font-size: .9rem;
+    font-weight: 500;
+  }
+
+  .read-more-spotlight {
+    color: var(--accent-2);
+    font-size: .85rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all .25s ease;
+    position: relative;
+  }
+
+  .read-more-spotlight:hover {
+    color: var(--accent-1);
+    text-decoration: underline;
+  }
+
+  .read-more-spotlight::after {
+    content: '→';
+    margin-left: .5rem;
+    transition: transform .25s ease;
+  }
+
+  .read-more-spotlight:hover::after {
+    transform: translateX(3px);
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .spotlight-card {
+      grid-template-columns: 1fr;
+      max-height: none;
+      min-height: auto;
+    }
+
+    .spotlight-image {
+      height: 200px;
+    }
+
+    .spotlight-content {
+      padding: 1.5rem 1.2rem;
+    }
+
+    .spotlight-title {
+      font-size: 1.4rem;
+    }
+
+    .spotlight-description {
+      font-size: 1rem;
+      -webkit-line-clamp: 3;
+    }
+
+    .read-more-spotlight {
+      font-size: .85rem;
+    }
+  }
+</style>

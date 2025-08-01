@@ -1,0 +1,215 @@
+/* ===== TIPOGRAFÍAS GOOGLE FONTS ===== */
+/* Orbitron: Títulos cyberpunk | Inter: Texto base | Bungee: Logo Glitch */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Inter:wght@400;600&family=Bungee&display=swap');
+
+/* ===== SISTEMA DE VARIABLES DE COLOR - DARK POR DEFECTO ===== */
+:root {
+    --bg-main: #0c0c0c;
+    --bg-card: #1e1e1e;
+    --txt-main: #ffffff;
+    --txt-muted: #a1a1aa;
+    --accent-1: #ff003c;
+    /* rojo neón */
+    --accent-2: #00c3ff;
+    /* azul neón */
+    --accent-3: #ffd500;
+    /* amarillo neón */
+    --shadow: 0 0 12px rgba(0, 195, 255, .35);
+}
+
+/* ===== TEMA CLARO ===== */
+html.light {
+    --bg-main: #f8fafc;
+    --bg-card: #ffffff;
+    --txt-main: #1e293b;
+    --txt-muted: #475569;
+    /* mismos acentos, pero con sombra suavizada */
+    --shadow: 0 0 10px rgba(0, 195, 255, .20);
+}
+
+/* ===== ESTILOS BASE ===== */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background: var(--bg-main);
+    color: var(--txt-main);
+    line-height: 1.6;
+    transition: background .3s ease, color .3s ease;
+}
+
+h1,
+h2,
+h3 {
+    font-family: 'Orbitron', sans-serif;
+    margin: 0;
+}
+
+a {
+    color: var(--accent-2);
+    text-decoration: none;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/* ===== HEADER STYLES MOVED TO GlitchHeader.astro COMPONENT ===== */
+
+/* ===== ARENA WELCOME SECTION ===== */
+.arena-welcome {
+    text-align: center;
+    padding: 4rem 1rem 2rem;
+}
+
+.arena-welcome h2 {
+    color: var(--accent-2);
+    font-size: 2.4rem;
+    letter-spacing: .1em;
+}
+
+.arena-welcome p {
+    max-width: 600px;
+    margin: 1rem auto;
+    color: var(--txt-muted);
+}
+
+/* ===== GAME POSTS GRID ===== */
+.game-grid {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    padding: 0 1rem 4rem;
+}
+
+/* ===== SPOTLIGHT CARD (DESTACADA) ===== */
+.spotlight-card {
+    background: var(--bg-card);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: transform .25s, box-shadow .25s;
+    margin-bottom: 3rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    max-height: 400px;
+}
+
+.spotlight-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 0 16px rgba(0, 195, 255, .45);
+}
+
+.spotlight-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.spotlight-card .card-content {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.spotlight-card h3 {
+    font-size: 1.8rem;
+    margin: 1rem 0;
+}
+
+.spotlight-card p {
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+    .spotlight-card {
+        grid-template-columns: 1fr;
+        max-height: none;
+    }
+}
+
+/* ===== GAME CARDS ===== */
+.game-card {
+    background: var(--bg-card);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: transform .25s, box-shadow .25s;
+}
+
+.game-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 0 16px rgba(0, 195, 255, .45);
+}
+
+.game-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    object-position: center;
+}
+
+.game-card .card-content {
+    padding: 1rem 1.2rem 1.5rem;
+}
+
+/* ===== CATEGORY TAGS (GameCard & SpotlightCard components) ===== */
+.category-tag {
+    display: inline-block;
+    font-size: .7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    margin-bottom: .5rem;
+}
+
+.category-tag.red {
+    color: var(--accent-1);
+}
+
+/* reseñas */
+.category-tag.blue {
+    color: var(--accent-2);
+}
+
+/* noticias */
+.category-tag.yellow {
+    color: var(--accent-3);
+}
+
+/* opiniones */
+
+/* ===== TÍTULOS Y ENLACES ===== */
+.game-card h3 {
+    font-size: 1.15rem;
+    margin: .25rem 0 .5rem;
+}
+
+.read-more {
+    color: var(--accent-2);
+    font-size: .85rem;
+}
+
+.read-more:hover {
+    text-decoration: underline;
+}
+
+/* ===== UTILIDADES ===== */
+.text-muted {
+    color: var(--txt-muted);
+}
+
+.text-small {
+    font-size: .9rem;
+}

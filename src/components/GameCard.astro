@@ -1,0 +1,187 @@
+---
+import type { GameCardProps } from "../types";
+import { getCategoryColor } from "../utils/postUtils";
+import { formatDate } from "../utils/dateUtils";
+import { CONTENT } from "../constants";
+
+interface Props extends GameCardProps {}
+
+const { title, description, category, image, slug, publishDate } = Astro.props;
+
+// Obtener color del tag
+const categoryColor = getCategoryColor(category);
+
+// Fecha en español
+const formattedDate = formatDate(publishDate);
+---
+
+<article class="game-card">
+  <div class="card-image">
+    <img src={image} alt={title} loading="lazy" />
+  </div>
+  
+  <div class="card-content">
+    <span class={`category-tag ${categoryColor}`}>
+      {category.toUpperCase()}
+    </span>
+    
+    <h3 class="card-title">
+      <a href={`/blog/${slug}`}>{title}</a>
+    </h3>
+    
+    <p class="card-description">{description}</p>
+    
+    <div class="card-footer">
+      <time class="card-date text-muted text-small" datetime={publishDate.toISOString()}>
+        {formattedDate}
+      </time>
+      
+      <a href={`/blog/${slug}`} class="read-more">
+        {CONTENT.READ_MORE_TEXT}
+      </a>
+    </div>
+  </div>
+</article>
+
+<style>
+  .game-card {
+    background: var(--bg-card);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: transform .25s ease, box-shadow .25s ease;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .game-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 0 16px rgba(0, 195, 255, .45);
+  }
+
+  .card-image {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card-image img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    object-position: center;
+    transition: transform .3s ease;
+  }
+
+  .game-card:hover .card-image img {
+    transform: scale(1.05);
+  }
+
+  .card-content {
+    padding: 1rem 1.2rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+
+  .category-tag {
+    display: inline-block;
+    font-size: .7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    margin-bottom: .5rem;
+    align-self: flex-start;
+  }
+
+  .category-tag.red {
+    color: var(--accent-1);
+  }
+
+  .category-tag.blue {
+    color: var(--accent-2);
+  }
+
+  .category-tag.yellow {
+    color: var(--accent-3);
+  }
+
+  .card-title {
+    font-size: 1.15rem;
+    margin: .25rem 0 .5rem;
+    line-height: 1.3;
+  }
+
+  .card-title a {
+    color: var(--txt-main);
+    text-decoration: none;
+    transition: color .25s ease;
+  }
+
+  .card-title a:hover {
+    color: var(--accent-2);
+  }
+
+  .card-description {
+    color: var(--txt-muted);
+    font-size: .9rem;
+    line-height: 1.5;
+    margin: 0 0 1rem;
+    flex-grow: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+  }
+
+  .card-date {
+    color: var(--txt-muted);
+    font-size: .8rem;
+  }
+
+  .read-more {
+    color: var(--accent-2);
+    font-size: .85rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all .25s ease;
+    position: relative;
+  }
+
+  .read-more:hover {
+    color: var(--accent-1);
+    text-decoration: underline;
+  }
+
+  .read-more::after {
+    content: '→';
+    margin-left: .25rem;
+    transition: transform .25s ease;
+  }
+
+  .read-more:hover::after {
+    transform: translateX(2px);
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .card-content {
+      padding: .8rem 1rem 1.2rem;
+    }
+
+    .card-title {
+      font-size: 1.05rem;
+    }
+
+    .card-description {
+      font-size: .85rem;
+    }
+  }
+</style>

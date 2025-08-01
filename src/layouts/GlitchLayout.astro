@@ -1,0 +1,69 @@
+---
+import type { LayoutProps } from '../types';
+import GlitchHeader from '../components/GlitchHeader.astro';
+import { SEO, THEME, FONTS } from '../constants';
+
+interface Props extends LayoutProps {}
+
+const { title, description = SEO.DEFAULT_DESCRIPTION, image = SEO.DEFAULT_IMAGE } = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const socialImageURL = new URL(image, Astro.site);
+---
+
+<!DOCTYPE html>
+<html lang={SEO.LANGUAGE}>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{title}</title>
+    
+    <!-- Meta tags básicos -->
+    <meta name="description" content={description}>
+    <meta name="generator" content={Astro.generator}>
+    <link rel="canonical" href={canonicalURL}>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href={SEO.DEFAULT_IMAGE}>
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content={canonicalURL}>
+    <meta property="og:title" content={title}>
+    <meta property="og:description" content={description}>
+    <meta property="og:image" content={socialImageURL}>
+    <meta property="og:locale" content={SEO.LOCALE}>
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content={canonicalURL}>
+    <meta property="twitter:title" content={title}>
+    <meta property="twitter:description" content={description}>
+    <meta property="twitter:image" content={socialImageURL}>
+    
+    <!-- Preload de fuentes críticas -->
+    <link rel="preconnect" href={FONTS.GOOGLE_FONTS_URL}>
+    <link rel="preconnect" href={FONTS.GOOGLE_FONTS_STATIC_URL} crossorigin>
+</head>
+<body>
+    <GlitchHeader currentPath={Astro.url.pathname} />
+    <main>
+        <slot />
+    </main>
+    
+    <script define:vars={{ THEME }}>
+        // Obtenemos el tema (claro  / oscuro) del usuario
+        const savedTheme = localStorage.getItem(THEME.STORAGE_KEY);
+        const root = document.documentElement;
+        
+        if (savedTheme === THEME.KEYS.LIGHT) {
+            root.classList.add(THEME.CSS_CLASS);
+        }
+    </script>
+</body>
+</html>
+
+<style>
+    /* Estilos globales */
+    @import '../styles/global.css';
+</style>

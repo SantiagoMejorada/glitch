@@ -1,0 +1,310 @@
+---
+import { getCollection } from "astro:content";
+import GlitchLayout from "../../layouts/GlitchLayout.astro";
+import GameCard from "../../components/GameCard.astro";
+import { UI_CONFIG, CATEGORIES } from "../../constants";
+import { sortPostsByDate, filterPostsByCategory } from "../../utils/postUtils";
+import type { Category } from "../../types";
+
+// Obtener todos los posts
+const allPosts = await getCollection("blog");
+
+// Fecha mas reciente
+const sortedPosts = sortPostsByDate(allPosts);
+
+
+const url = Astro.url;
+// Reseña | Opinion | Noticia
+const categoryFilter = url.searchParams.get('categoria') as Category | null;
+
+const filteredPosts = categoryFilter 
+  ? filterPostsByCategory(sortedPosts, categoryFilter)
+  : sortedPosts;
+
+const availableCategories = Object.values(CATEGORIES);
+---
+
+<GlitchLayout title={UI_CONFIG.PAGE_TITLES.BLOG}>
+  <div class="blog-container">
+    <div class="container">
+      <!-- Header de la página -->
+      <header class="blog-header">
+        <h1 class="blog-title">Blog Gaming</h1>
+        <p class="blog-subtitle">
+          {categoryFilter 
+            ? `Posts de ${availableCategories.find(cat => cat.key === categoryFilter)?.displayName || categoryFilter}` 
+            : 'Todas las reseñas, noticias y opiniones sobre videojuegos'
+          }
+        </p>
+      </header>
+
+      <!-- Filtros de categoría -->
+      <nav class="category-filters">
+        <a 
+          href="/blog" 
+          class={`filter-button ${!categoryFilter ? 'active' : ''}`}
+        >
+          Todos
+        </a>
+        {availableCategories.map((category) => (
+          <a 
+            href={`/blog?categoria=${category.key}`}
+            class={`filter-button ${categoryFilter === category.key ? 'active' : ''} ${category.color}`}
+          >
+            {category.displayName}
+          </a>
+        ))}
+      </nav>
+
+      <!-- Grid de posts -->
+      <section class="posts-section">
+        {filteredPosts.length > 0 ? (
+          <div class="posts-grid">
+            {filteredPosts.map((post) => (
+              <GameCard
+                title={post.data.title}
+                description={post.data.description}
+                category={post.data.category}
+                image={post.data.image}
+                slug={post.slug}
+                publishDate={post.data.publishDate}
+              />
+            ))}
+          </div>
+        ) : (
+          <div class="no-posts">
+            <p>No hay posts disponibles{categoryFilter ? ` en la categoría "${categoryFilter}"` : ''}.</p>
+            {categoryFilter && (
+              <a href="/blog" class="back-to-all">Ver todos los posts</a>
+            )}
+          </div>
+        )}
+      </section>
+    </div>
+  </div>
+</GlitchLayout>
+
+<style>
+  .blog-container {
+    padding: 2rem 0 4rem;
+    min-height: calc(100vh - 80px);
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  /* Header de la página */
+  .blog-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .blog-title {
+    font-family: var(--font-orbitron);
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: var(--txt-main);
+    margin: 0 0 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .blog-subtitle {
+    color: var(--txt-muted);
+    font-size: 1.1rem;
+    margin: 0;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.5;
+  }
+
+  /* Filtros de categoría */
+  .category-filters {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+  }
+
+  .filter-button {
+    padding: 0.75rem 1.5rem;
+    background: var(--bg-card);
+    color: var(--txt-muted);
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: all 0.25s ease;
+    border: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .filter-button:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+  }
+
+  .filter-button.active {
+    color: var(--txt-main);
+    background: var(--bg-main);
+    border-color: var(--accent-2);
+    box-shadow: 0 0 12px rgba(0, 195, 255, 0.3);
+  }
+
+  /* Colores específicos para categorías */
+  .filter-button.red.active {
+    border-color: var(--accent-1);
+    box-shadow: 0 0 12px rgba(255, 0, 60, 0.3);
+  }
+
+  .filter-button.yellow.active {
+    border-color: var(--accent-3);
+    box-shadow: 0 0 12px rgba(255, 213, 0, 0.3);
+  }
+
+  .filter-button.blue.active {
+    border-color: var(--accent-2);
+    box-shadow: 0 0 12px rgba(0, 195, 255, 0.3);
+  }
+
+  /* Sección de posts */
+  .posts-section {
+    margin-top: 2rem;
+  }
+
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+
+  /* Estado sin posts */
+  .no-posts {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--txt-muted);
+  }
+
+  .no-posts p {
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .back-to-all {
+    color: var(--accent-2);
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.75rem 1.5rem;
+    border: 2px solid var(--accent-2);
+    border-radius: 25px;
+    transition: all 0.25s ease;
+    display: inline-block;
+  }
+
+  .back-to-all:hover {
+    background: var(--accent-2);
+    color: var(--bg-main);
+    transform: translateY(-2px);
+    box-shadow: 0 0 12px rgba(0, 195, 255, 0.4);
+  }
+
+  /* Responsive design */
+  @media (max-width: 768px) {
+    .blog-container {
+      padding: 1rem 0 2rem;
+    }
+
+    .container {
+      padding: 0 0.75rem;
+    }
+
+    .blog-header {
+      margin-bottom: 2rem;
+    }
+
+    .blog-title {
+      font-size: 2rem;
+    }
+
+    .blog-subtitle {
+      font-size: 1rem;
+    }
+
+    .category-filters {
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+    }
+
+    .filter-button {
+      padding: 0.6rem 1.2rem;
+      font-size: 0.85rem;
+    }
+
+    .posts-grid {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    .no-posts {
+      padding: 3rem 1rem;
+    }
+  }
+
+  /* Ajustes para pantallas grandes */
+  @media (min-width: 1024px) {
+    .posts-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (min-width: 769px) and (max-width: 1023px) {
+    .posts-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  /* Efectos adicionales para mejorar la experiencia */
+  .filter-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.5s ease;
+  }
+
+  .filter-button:hover::before {
+    left: 100%;
+  }
+
+  /* Animación de entrada para los posts */
+  .posts-grid .game-card {
+    animation: fadeInUp 0.6s ease forwards;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  .posts-grid .game-card:nth-child(1) { animation-delay: 0.1s; }
+  .posts-grid .game-card:nth-child(2) { animation-delay: 0.2s; }
+  .posts-grid .game-card:nth-child(3) { animation-delay: 0.3s; }
+  .posts-grid .game-card:nth-child(4) { animation-delay: 0.4s; }
+  .posts-grid .game-card:nth-child(5) { animation-delay: 0.5s; }
+  .posts-grid .game-card:nth-child(6) { animation-delay: 0.6s; }
+
+  @keyframes fadeInUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>

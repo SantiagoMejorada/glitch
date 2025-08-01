@@ -1,16 +1,135 @@
 ---
+import { getCollection } from "astro:content";
+import GlitchLayout from "../layouts/GlitchLayout.astro";
+import ArenaWelcome from "../components/ArenaWelcome.astro";
+import SpotlightCard from "../components/SpotlightCard.astro";
+import GameCard from "../components/GameCard.astro";
+import { UI_CONFIG } from "../constants";
+import {
+	sortPostsByDate,
+	getLatestPost,
+	getRecentPosts,
+	getFeaturedPosts,
+} from "../utils/postUtils";
 
+const allPosts = await getCollection("blog");
+
+const sortedPosts = sortPostsByDate(allPosts);
+
+const featuredPosts = getFeaturedPosts(sortedPosts);
+
+// Priorizar posts destacados, si no hay, usar el más reciente para el spotlight
+const spotlightPost =
+	featuredPosts.length > 0 ? featuredPosts[0] : getLatestPost(sortedPosts);
+
+// Obtener los siguientes 3 posts más recientes
+const recentPosts = spotlightPost
+	? getRecentPosts(sortedPosts, spotlightPost.slug, 3)
+	: getRecentPosts(sortedPosts, undefined, 3);
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<GlitchLayout title={UI_CONFIG.PAGE_TITLES.HOME}>
+	<ArenaWelcome />
+	
+	<div class="main-content">
+		<div class="container">
+			{
+				spotlightPost && (
+					<section class="spotlight-section">
+						<SpotlightCard
+							title={spotlightPost.data.title}
+							description={spotlightPost.data.description}
+							category={spotlightPost.data.category}
+							image={spotlightPost.data.image}
+							slug={spotlightPost.slug}
+							publishDate={spotlightPost.data.publishDate}
+						/>
+					</section>
+				)
+			}
+
+			{
+				recentPosts.length > 0 && (
+					<section class="recent-posts-section">
+						<div class="posts-grid">
+							{recentPosts.map((post) => (
+								<GameCard
+									title={post.data.title}
+									description={post.data.description}
+									category={post.data.category}
+									image={post.data.image}
+									slug={post.slug}
+									publishDate={post.data.publishDate}
+								/>
+							))}
+						</div>
+					</section>
+				)
+			}
+		</div>
+	</div>
+</GlitchLayout>
+
+<style>
+	.main-content {
+		padding: 2rem 0 4rem;
+	}
+
+	.container {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 0 1rem;
+	}
+
+	.spotlight-section {
+		margin-bottom: 3rem;
+	}
+
+	.recent-posts-section {
+		margin-top: 3rem;
+	}
+
+	.posts-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+		gap: 2rem;
+		margin-top: 1rem;
+	}
+
+	/* Responsive adjustments */
+	@media (max-width: 768px) {
+		.main-content {
+			padding: 1rem 0 2rem;
+		}
+
+		.container {
+			padding: 0 0.75rem;
+		}
+
+		.spotlight-section {
+			margin-bottom: 2rem;
+		}
+
+		.recent-posts-section {
+			margin-top: 2rem;
+		}
+
+		.posts-grid {
+			grid-template-columns: 1fr;
+			gap: 1.5rem;
+		}
+	}
+
+	/* Ensure proper spacing and layout */
+	@media (min-width: 1024px) {
+		.posts-grid {
+			grid-template-columns: repeat(3, 1fr);
+		}
+	}
+
+	@media (min-width: 769px) and (max-width: 1023px) {
+		.posts-grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+</style>

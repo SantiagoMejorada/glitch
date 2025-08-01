@@ -1,0 +1,213 @@
+---
+import type { HeaderProps } from "../types";
+import { Sun, Moon } from "lucide-astro";
+import { ROUTES, UI_CONFIG, THEME, ICONS } from "../constants";
+
+interface Props extends HeaderProps {}
+
+const { currentPath } = Astro.props;
+
+// Determinar qué enlace está activo basado en la ruta actual
+const isActive = (path: string) => {
+  if (path === ROUTES.HOME && currentPath === ROUTES.HOME) return true;
+  if (path !== ROUTES.HOME && currentPath.startsWith(path)) return true;
+  return false;
+};
+---
+
+<header class="glitch-header">
+  <div class="glitch-brand">{UI_CONFIG.BRAND_NAME}</div>
+
+  <nav class="glitch-nav">
+    <a
+      href={ROUTES.HOME}
+      class={isActive(ROUTES.HOME) ? "nav-active" : ""}
+      >{UI_CONFIG.NAV_LABELS.HOME}</a
+    >
+    <a
+      href={ROUTES.BLOG}
+      class={isActive(ROUTES.BLOG) ? "nav-active" : ""}
+      >{UI_CONFIG.NAV_LABELS.BLOG}</a
+    >
+    <a
+      href={ROUTES.ABOUT}
+      class={isActive(ROUTES.ABOUT) ? "nav-active" : ""}
+      >{UI_CONFIG.NAV_LABELS.ABOUT}</a
+    >
+  </nav>
+
+  <!-- Theme Toggle -->
+  <button
+    class="theme-toggle"
+    title={UI_CONFIG.THEME_TOGGLE.TITLE}
+    id={UI_CONFIG.THEME_TOGGLE.BUTTON_ID}
+  >
+    <Sun class="sun-icon" size={ICONS.SIZE} />
+    <Moon class="moon-icon" size={ICONS.SIZE} />
+  </button>
+</header>
+
+<script>
+  import { THEME, UI_CONFIG } from "../constants";
+
+  // Script para alternar tema claro/oscuro
+  const toggleButton = document.getElementById(
+    UI_CONFIG.THEME_TOGGLE.BUTTON_ID,
+  ) as HTMLButtonElement;
+  const root = document.documentElement;
+
+  if (toggleButton) {
+    // Cargar tema guardado al inicializar
+    const savedTheme = localStorage.getItem(THEME.STORAGE_KEY);
+    if (savedTheme === THEME.KEYS.LIGHT) {
+      root.classList.add(THEME.CSS_CLASS);
+    }
+
+    // Manejar cambio de tema
+    toggleButton.addEventListener("click", () => {
+      const isLight = root.classList.contains(THEME.CSS_CLASS);
+      root.classList.toggle(THEME.CSS_CLASS, !isLight);
+      localStorage.setItem(
+        THEME.STORAGE_KEY,
+        !isLight ? THEME.KEYS.LIGHT : THEME.KEYS.DARK,
+      );
+    });
+  }
+</script>
+
+<style>
+  .glitch-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem 2rem;
+    background: var(--bg-main);
+    border-bottom: 1px solid var(--bg-card);
+  }
+
+  .glitch-brand {
+    color: var(--accent-1);
+    font-size: 1.75rem;
+    font-family: "Bungee", cursive;
+    text-shadow: 0 0 10px rgba(255, 0, 60, 0.3);
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    transition: all 0.3s ease;
+  }
+
+  .glitch-brand:hover {
+    text-shadow: 0 0 15px rgba(255, 0, 60, 0.5);
+    transform: scale(1.02);
+  }
+
+  /* Mejor contraste en modo claro */
+  html.light .glitch-brand {
+    text-shadow:
+      0 2px 4px rgba(255, 0, 60, 0.2),
+      0 0 8px rgba(255, 0, 60, 0.1);
+    font-weight: 500;
+  }
+
+  html.light .glitch-brand:hover {
+    text-shadow:
+      0 2px 6px rgba(255, 0, 60, 0.3),
+      0 0 12px rgba(255, 0, 60, 0.2);
+  }
+
+  .glitch-nav {
+    display: flex;
+    align-items: center;
+    background: var(--bg-card);
+    padding: 0.5rem;
+    border-radius: 50px;
+    box-shadow: var(--shadow);
+  }
+
+  .glitch-nav a {
+    font-size: 0.9rem;
+    font-weight: 500;
+    position: relative;
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    transition: all 0.25s ease;
+    color: var(--txt-muted);
+    margin: 0 0.25rem;
+    text-decoration: none;
+  }
+
+  .glitch-nav a:hover {
+    color: var(--txt-main);
+    text-decoration: none;
+  }
+
+  .glitch-nav a.nav-active {
+    background: var(--accent-1);
+    color: white;
+    box-shadow: 0 2px 8px rgba(255, 20, 147, 0.2);
+    text-decoration: none;
+  }
+
+  /* Theme Toggle Styles */
+  .theme-toggle {
+    background: var(--bg-card);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    margin-left: 2rem;
+    padding: 0.75rem;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow);
+    height: 44px;
+    width: 44px;
+  }
+
+  .theme-toggle:hover {
+    transform: translateY(-1px);
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: 0 2px 8px rgba(0, 195, 255, 0.15);
+  }
+
+  /* Icon positioning and visibility */
+  .sun-icon,
+  .moon-icon {
+    position: absolute;
+    transition: all 0.3s ease;
+  }
+
+  /* Default state (dark mode) - show moon icon */
+  .sun-icon {
+    opacity: 0;
+    transform: rotate(180deg) scale(0.8);
+  }
+
+  .moon-icon {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+    color: #64b5f6;
+  }
+
+  /* Light mode - show sun icon */
+  html.light .theme-toggle {
+    border-color: rgba(0, 0, 0, 0.1);
+  }
+
+  html.light .sun-icon {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+    color: #f57c00;
+  }
+
+  html.light .moon-icon {
+    opacity: 0;
+    transform: rotate(-180deg) scale(0.8);
+  }
+
+  html.light .theme-toggle:hover {
+    background: rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+</style>
